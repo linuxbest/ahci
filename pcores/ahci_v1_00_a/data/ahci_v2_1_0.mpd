@@ -1,0 +1,136 @@
+##############################################################
+#
+# Copyright (c) 2010 Beijing Soul, Inc. All rights reserved.
+#
+# Hu Gang
+# 
+##############################################################
+
+
+BEGIN ahci
+
+OPTION STYLE = HDL
+OPTION IPTYPE = BRIDGE
+OPTION IMP_NETLIST = FALSE
+OPTION RUN_NGCBUILD = TRUE
+OPTION HDL = VERILOG
+OPTION LAST_UPDATED = 10.1.2
+OPTION DESC = TACHYON
+OPTION IP_GROUP = MICROBLAZE:PPC:USER
+OPTION PLATGEN_SYSLEVEL_UPDATE_PROC = generate_corelevel_ucf
+OPTION ARCH_SUPPORT_MAP = (virtex2p=PREFERRED, virtex4lx=PREFERRED, virtex4sx=PREFERRED, virtex4fx=PREFERRED, virtex5lx=PREFERRED, virtex5sx=PREFERRED, virtex5tx=PREFERRED, virtex5fx=PREFERRED)
+
+BUS_INTERFACE BUS = SLMB, BUS_STD = LMB, BUS_TYPE = SLAVE
+
+PARAMETER C_FAMILY = virtex5, DT = STRING
+PARAMETER C_CHIPSCOPE = 0, DT = INTETER
+PARAMETER C_PM = 2, DT = INTETER
+PARAMETER C_PORT = 0b1111
+PARAMETER C_VERSION = 0xdeaddead, DT = STD_LOGIC_VECTOR,  IPLEVEL_UPDATE_VALUE_PROC = update_version_proc
+PARAMETER C_LINKFSM_DEBUG = 0, DT = INTEGER
+PARAMETER C_NUM_WIDTH = 5, DT = INTEGER, DESC = Width of M_xxNum, LONG_DESC = Width of the M_xxNum signal used to specify the length of a transfer. This value should be at least 5 to allow for full 16-dword fixed-length bursts. It may be larger to enable variable length bursts of arbitrary length.
+
+## Bus Interfaces
+BUS_INTERFACE BUS = MLIPIF, BUS_TYPE = INITIATOR, BUS_STD = MLIPIF
+
+## Ports
+# Lipif master interface
+PORT M_Clk        = M_Clk       , DIR = I, SIGIS = CLK, BUS = MLIPIF
+PORT M_Reset      = M_Reset     , DIR = I, SIGIS = RST, BUS = MLIPIF
+PORT M_Error      = M_Error     , DIR = I, BUS = MLIPIF
+PORT M_Lock       = M_Lock      , DIR = O, BUS = MLIPIF
+PORT M_rdReq      = M_rdReq     , DIR = O, DESC = 'Read Request', BUS = MLIPIF
+PORT M_rdAccept   = M_rdAccept  , DIR = I, BUS = MLIPIF
+PORT M_rdAddr     = M_rdAddr    , DIR = O, VEC = [31:0], BUS = MLIPIF
+PORT M_rdNum      = M_rdNum     , DIR = O, VEC = [(C_NUM_WIDTH-1):0], ENDIAN = LITTLE, BUS = MLIPIF
+PORT M_rdBE       = M_rdBE      , DIR = O, VEC = [7:0], BUS = MLIPIF
+PORT M_rdData     = M_rdData    , DIR = I, VEC = [63:0], BUS = MLIPIF
+PORT M_rdAck      = M_rdAck     , DIR = I, BUS = MLIPIF
+PORT M_rdComp     = M_rdComp    , DIR = I, BUS = MLIPIF
+PORT M_rdPriority = M_rdPriority, DIR = O, VEC = [1:0], BUS = MLIPIF
+PORT M_rdType     = M_rdType    , DIR = O, VEC = [2:0], BUS = MLIPIF
+PORT M_rdCompress = M_rdCompress, DIR = O, BUS = MLIPIF
+PORT M_rdGuarded  = M_rdGuarded , DIR = O, BUS = MLIPIF
+PORT M_rdLockErr  = M_rdLockErr , DIR = O, BUS = MLIPIF
+PORT M_rdRearb    = M_rdRearb   , DIR = I, BUS = MLIPIF
+PORT M_rdAbort    = M_rdAbort   , DIR = O, BUS = MLIPIF
+PORT M_rdError    = M_rdError   , DIR = I, BUS = MLIPIF
+PORT M_wrReq      = M_wrReq     , DIR = O, BUS = MLIPIF
+PORT M_wrAccept   = M_wrAccept  , DIR = I, BUS = MLIPIF
+PORT M_wrAddr     = M_wrAddr    , DIR = O, VEC = [31:0], BUS = MLIPIF
+PORT M_wrNum      = M_wrNum     , DIR = O, VEC = [(C_NUM_WIDTH-1):0], ENDIAN = LITTLE, BUS = MLIPIF
+PORT M_wrBE       = M_wrBE      , DIR = O, VEC = [7:0], BUS = MLIPIF
+PORT M_wrData     = M_wrData    , DIR = O, VEC = [63:0], BUS = MLIPIF
+PORT M_wrRdy      = M_wrRdy     , DIR = I, BUS = MLIPIF
+PORT M_wrAck      = M_wrAck     , DIR = I, BUS = MLIPIF
+PORT M_wrComp     = M_wrComp    , DIR = I, BUS = MLIPIF
+PORT M_wrPriority = M_wrPriority, DIR = O, VEC = [1:0], BUS = MLIPIF
+PORT M_wrType     = M_wrType    , DIR = O, VEC = [2:0], BUS = MLIPIF
+PORT M_wrCompress = M_wrCompress, DIR = O, BUS = MLIPIF
+PORT M_wrGuarded  = M_wrGuarded , DIR = O, BUS = MLIPIF
+PORT M_wrOrdered  = M_wrOrdered , DIR = O, BUS = MLIPIF
+PORT M_wrLockErr  = M_wrLockErr , DIR = O, BUS = MLIPIF
+PORT M_wrRearb    = M_wrRearb   , DIR = I, BUS = MLIPIF
+PORT M_wrAbort    = M_wrAbort   , DIR = O, BUS = MLIPIF
+PORT M_wrError    = M_wrError   , DIR = I, BUS = MLIPIF
+
+# DCR
+BUS_INTERFACE BUS = SDCR, BUS_STD = DCR, BUS_TYPE = SLAVE
+PORT DCR_Clk = "", DIR = I, SIGIS = CLK
+PORT DCR_Rst = "", DIR = I
+PORT DCR_Read = DCR_Read, DIR = I, BUS = SDCR
+PORT DCR_Write = DCR_Write, DIR = I, BUS = SDCR
+PORT DCR_ABus = DCR_ABus, DIR = I, VEC = [0:9], BUS = SDCR
+PORT DCR_Sl_DBus = DCR_Sl_DBus, DIR = I, VEC = [0:31], BUS = SDCR
+PORT Sl_dcrDBus = Sl_dcrDBus, DIR = O, VEC = [0:31], BUS = SDCR
+PORT Sl_dcrAck = Sl_dcrAck, DIR = O, BUS = SDCR
+
+# Interrupt to CPU
+#
+PORT interrupt         = "",              DIR = O, SIGIS = INTERRUPT, SENSITIVITY = LEVEL_HIGH
+
+# SATA 
+BUS_INTERFACE BUS = GTXBUS0, BUS_TYPE = INITIATOR, BUS_STD = GTXIF
+PORT phyreset0       = phyreset,       DIR = O, BUS = GTXBUS0
+PORT phyclk0         = phyclk,         DIR = I, BUS = GTXBUS0
+PORT txdata0         = txdata,         DIR = O, BUS = GTXBUS0, VEC = [31:0]
+PORT txdatak0        = txdatak,        DIR = O, BUS = GTXBUS0
+PORT txdatak_pop0    = txdatak_pop,    DIR = I, BUS = GTXBUS0
+PORT rxdata0         = rxdata,         DIR = I, BUS = GTXBUS0, VEC = [31:0]
+PORT rxdatak0        = rxdatak,        DIR = I, BUS = GTXBUS0
+PORT linkup0         = linkup,         DIR = I, BUS = GTXBUS0
+PORT plllock0        = plllock,        DIR = I, BUS = GTXBUS0
+PORT oob2dbg0        = oob2dbg,        DIR = I, BUS = GTXBUS0, VEC = [127:0]
+PORT StartComm0      = StartComm,      DIR = O, BUS = GTXBUS0
+PORT CommInit0       = CommInit,       DIR = I, BUS = GTXBUS0
+PORT gtx_tune0       = gtx_tune,       DIR = O, BUS = GTXBUS0, VEC = [31:0]
+PORT gtx_txdata0     = gtx_txdata,     DIR = I, BUS = GTXBUS0, VEC = [31:0]
+PORT gtx_txdatak0    = gtx_txdatak,    DIR = I, BUS = GTXBUS0, VEC = [3:0]
+PORT gtx_rxdata0     = gtx_rxdata,     DIR = I, BUS = GTXBUS0, VEC = [31:0]
+PORT gtx_rxdatak0    = gtx_rxdatak,    DIR = I, BUS = GTXBUS0, VEC = [3:0]
+
+BUS_INTERFACE BUS = GTXBUS1, BUS_TYPE = INITIATOR, BUS_STD = GTXIF
+PORT phyreset1        = phyreset,       DIR = O, BUS = GTXBUS1
+PORT phyclk1          = phyclk,         DIR = I, BUS = GTXBUS1
+PORT txdata1          = txdata,         DIR = O, BUS = GTXBUS1, VEC = [31:0]
+PORT txdatak1         = txdatak,        DIR = O, BUS = GTXBUS1
+PORT txdatak_pop1     = txdatak_pop,    DIR = I, BUS = GTXBUS0
+PORT rxdata1          = rxdata,         DIR = I, BUS = GTXBUS1, VEC = [31:0]
+PORT rxdatak1         = rxdatak,        DIR = I, BUS = GTXBUS1
+PORT linkup1          = linkup,         DIR = I, BUS = GTXBUS1
+PORT plllock1         = plllock,        DIR = I, BUS = GTXBUS1
+PORT oob2dbg1         = oob2dbg,        DIR = I, BUS = GTXBUS1, VEC = [127:0]
+PORT StartComm1       = StartComm,      DIR = O, BUS = GTXBUS1
+PORT CommInit1        = CommInit,       DIR = I, BUS = GTXBUS1
+PORT gtx_tune1       = gtx_tune,       DIR = O, BUS = GTXBUS1, VEC = [31:0]
+PORT gtx_txdata1     = gtx_txdata,     DIR = I, BUS = GTXBUS1, VEC = [31:0]
+PORT gtx_txdatak1    = gtx_txdatak,    DIR = I, BUS = GTXBUS1, VEC = [3:0]
+PORT gtx_rxdata1     = gtx_rxdata,     DIR = I, BUS = GTXBUS1, VEC = [31:0]
+PORT gtx_rxdatak1    = gtx_rxdatak,    DIR = I, BUS = GTXBUS1, VEC = [3:0]
+
+PORT sata_ledA0  = "", DIR = O
+PORT sata_ledB0  = "", DIR = O
+PORT sata_ledA1  = "", DIR = O
+PORT sata_ledB1  = "", DIR = O
+
+END

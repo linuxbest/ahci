@@ -1,0 +1,56 @@
+##############################################################
+#
+# Copyright (c) 2010 Beijing Soul, Inc. All rights reserved.
+#
+# Hu Gang
+# 
+##############################################################
+
+lib ahci_v1_00_a ahci      verilog
+
+lib ahci_v1_00_a dcr       verilog
+lib ahci_v1_00_a datamem   verilog
+lib ahci_v1_00_a port      verilog
+lib ahci_v1_00_a aport     verilog
+lib ahci_v1_00_a aport_dcr verilog
+lib ahci_v1_00_a ififo     verilog
+
+lib ahci_v1_00_a ctrl_ll   verilog
+lib ahci_v1_00_a rxll      verilog
+lib ahci_v1_00_a rxll_ll   verilog
+lib ahci_v1_00_a rxll_fsm  verilog
+lib ahci_v1_00_a rxll_fifo verilog
+
+lib ahci_v1_00_a txll      verilog
+lib ahci_v1_00_a txll_ll   verilog
+lib ahci_v1_00_a txll_fsm  verilog
+lib ahci_v1_00_a txll_fifo verilog
+
+lib ahci_v1_00_a ctba      verilog
+lib ahci_v1_00_a ctba_ram  verilog
+lib ahci_v1_00_a rxdma     verilog
+lib ahci_v1_00_a txdma     verilog
+lib ahci_v1_00_a dma_al    verilog
+lib ahci_v1_00_a dma_dh    verilog
+lib ahci_v1_00_a osm_npi   verilog
+
+lib ahci_v1_00_a crossdomain/reg_sync  verilog
+lib ahci_v1_00_a crossdomain/signal    verilog
+
+lib ipic_v1_00_a ipic_dummy verilog
+lib ipic_v1_00_a ipic_rd   verilog
+lib ipic_v1_00_a ipic_wr   verilog
+lib ipic_v1_00_a ipic_arb  verilog
+lib ipic_v1_00_a ipic_inn  verilog
+lib ipic_v1_00_a ipic_in   verilog
+lib ipic_v1_00_a ipic_out  verilog
+lib ipic_v1_00_a ipic_outn verilog
+
+lib ahci_v1_00_a ll/sata_link verilog
+lib ahci_v1_00_a ll/crc       verilog
+lib ahci_v1_00_a ll/scrambler verilog
+lib ahci_v1_00_a ll/link_fsm  verilog
+lib ahci_v1_00_a ll/rx_cs     verilog
+lib ahci_v1_00_a ll/tx_cs     verilog
+lib ahci_v1_00_a ll/fifo_36w_36r verilog
+lib ahci_v1_00_a srl16e_fifo_protect  verilog
